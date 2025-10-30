@@ -1,0 +1,249 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>bethsbistro</title>
+
+    <link rel="preconnect" href="https://fonts.googleapis.com">
+    <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+    <link href="https://fonts.googleapis.com/css2?family=BBH+Sans+Bartle&family=BBH+Sans+Bogle&display=swap" rel="stylesheet">
+    <link rel="stylesheet" type="text/css" href="about.css">
+    <link rel="stylesheet" type="text/css" href="slides.css">
+
+    <style>
+        body {
+            font-family: 'BBH Sans Bogle', sans-serif;
+            margin: 0;
+            padding: 0;
+            color: rgb(83, 56, 56);
+        }
+
+        a:link, a:visited {
+            text-decoration: none;
+            color: rgb(249, 244, 219);
+        }
+
+        .hero_text h1 a {
+            color: rgb(249, 244, 219);
+        }
+
+        table {
+            width: 80%;
+            margin: 100px auto 20px auto;
+            font-size: 40px;
+            text-align: center;
+            border-collapse: collapse;
+        }
+
+        table th {
+            font-size: 50px;
+        }
+
+        table tr {
+            cursor: pointer;
+            transition: background-color 0.2s;
+        }
+
+        table tr:hover {
+            background-color: #fff3e0;
+        }
+
+        /* Cart styling */
+        .cart {
+            width: 80%;
+            margin: 20px auto 50px auto;
+            border-top: 2px solid rgb(83, 56, 56);
+            padding-top: 20px;
+            background-color: #fff8f0;
+            border-radius: 10px;
+        }
+
+        .cart-item {
+            display: flex;
+            justify-content: space-between;
+            padding: 10px 20px;
+            border-bottom: 1px solid #eee;
+            font-size: 32px;
+        }
+
+        .cart-item:last-child {
+            border-bottom: none;
+        }
+
+        .remove-btn {
+            color: rgb(83, 56, 56);
+
+            cursor: pointer;
+            font-weight: bold;
+        }
+
+        .remove-btn:hover {
+            color: #c0392b;
+        }
+
+        .slider {
+            margin: 50px auto;
+        }
+    </style>
+</head>
+<body>
+    <div class="hero">
+        <div class="hero_text">
+            <h1><a href="index.html">Coffee Bistro</a></h1>
+        </div>
+    </div>
+
+    <!-- Menu Table -->
+    <table id="menu">
+        <tr style="font-size: 50px;">
+            <th>Bistro Bites & Drinks</th>
+            <th>$</th>
+        </tr>
+        <tr data-name="House-Brewed Espresso" data-price="2">
+            <td>House-Brewed Espresso</td>
+            <td>2</td>
+        </tr>
+        <tr data-name="Latte" data-price="3.50">
+            <td>Latte</td>
+            <td>3.50</td>
+        </tr>
+        <tr data-name="Americano" data-price="3">
+            <td>Americano</td>
+            <td>3</td>
+        </tr>
+        <tr data-name="Flat White" data-price="3">
+            <td>Flat White</td>
+            <td>3</td>
+        </tr>
+        <tr data-name="Croissant" data-price="3">
+            <td>Croissant</td>
+            <td>3</td>
+        </tr>
+        <tr data-name="Muffin of the Day" data-price="3">
+            <td>Muffin of the Day</td>
+            <td>3</td>
+        </tr>
+        <tr data-name="Bag of Coffee Beans" data-price="10">
+            <td>Bag of Coffee Beans</td>
+            <td>10</td>
+        </tr>
+    </table>
+
+    <!-- Shopping Cart -->
+    <div class="cart" id="cart">
+        <p>NO ITEMS IN CART.</p>
+    </div>
+
+    <!-- Slider -->
+   <!-- Slider -->
+<div class="slider">
+  <!-- radio buttons (must be siblings BEFORE .slides for the CSS sibling selector to work) -->
+  <input type="radio" name="radio-btn" id="radio1" checked>
+  <input type="radio" name="radio-btn" id="radio2">
+  <input type="radio" name="radio-btn" id="radio3">
+  <input type="radio" name="radio-btn" id="radio4">
+  <input type="radio" name="radio-btn" id="radio5">
+  <input type="radio" name="radio-btn" id="radio6">
+
+  <div class="slides">
+    <div class="slide"><img src="americano.jpeg" alt="Slide 1"></div>
+    <div class="slide"><img src="coffee.jpeg" alt="Slide 2"></div>
+    <div class="slide"><img src="croissant.jpeg" alt="Slide 3"></div>
+    <div class="slide"><img src="interior.jpeg" alt="Slide 4"></div>
+    <div class="slide"><img src="muffin.jpeg" alt="Slide 5"></div>
+    <div class="slide"><img src="Unknown.jpeg" alt="Slide 6"></div>
+  </div>
+
+  <div class="navigation-manual">
+    <label for="radio1" class="manual-btn"></label>
+    <label for="radio2" class="manual-btn"></label>
+    <label for="radio3" class="manual-btn"></label>
+    <label for="radio4" class="manual-btn"></label>
+    <label for="radio5" class="manual-btn"></label>
+    <label for="radio6" class="manual-btn"></label>
+  </div>
+</div>
+
+    <script>
+const menuRows = document.querySelectorAll('#menu tr[data-name]');
+const cartDiv = document.getElementById('cart');
+
+let cart = [];
+
+// Add items to cart
+menuRows.forEach(row => {
+    row.addEventListener('click', () => {
+        const name = row.dataset.name;
+        const price = parseFloat(row.dataset.price);
+
+        const existingItem = cart.find(i => i.name === name);
+        if (existingItem) {
+            existingItem.quantity += 1;
+        } else {
+            cart.push({ name, price, quantity: 1 });
+        }
+
+        renderCart();
+    });
+});
+
+function renderCart() {
+    if (cart.length === 0) {
+        cartDiv.innerHTML = '<p>NO ITEMS IN CART.</p>';
+        return;
+    }
+
+    cartDiv.innerHTML = '';
+
+    cart.forEach((item, index) => {
+        const cartItem = document.createElement('div');
+        cartItem.className = 'cart-item';
+        cartItem.innerHTML = `
+            <span>${item.name} x ${item.quantity} - $${(item.price * item.quantity).toFixed(2)}</span>
+            <span class="remove-btn" data-index="${index}">Remove</span>
+        `;
+        cartDiv.appendChild(cartItem);
+    });
+
+    // Calculate total
+    const total = cart.reduce((sum, item) => sum + item.price * item.quantity, 0);
+    const totalDiv = document.createElement('div');
+    totalDiv.style.fontWeight = 'bold';
+    totalDiv.style.fontSize = '36px';
+    totalDiv.style.marginTop = '20px';
+    totalDiv.textContent = `Total: $${total.toFixed(2)}`;
+    cartDiv.appendChild(totalDiv);
+
+    // Clear cart button
+    const clearBtn = document.createElement('button');
+    clearBtn.textContent = 'Clear Cart';
+    clearBtn.style.marginTop = '10px';
+    clearBtn.style.padding = '10px 20px';
+    clearBtn.style.fontSize = '24px';
+    clearBtn.style.backgroundColor = '#5c4033';
+    clearBtn.style.color = '#fff';
+    clearBtn.style.border = 'none';
+    clearBtn.style.borderRadius = '8px';
+    clearBtn.style.cursor = 'pointer';
+    clearBtn.addEventListener('click', () => {
+        cart = [];
+        renderCart();
+    });
+    cartDiv.appendChild(clearBtn);
+
+    // Add remove functionality
+    const removeButtons = document.querySelectorAll('.remove-btn');
+    removeButtons.forEach(btn => {
+        btn.addEventListener('click', () => {
+            const index = btn.dataset.index;
+            cart.splice(index, 1);
+            renderCart();
+        });
+    });
+}
+
+    </script>
+</body>
+</html>
+
